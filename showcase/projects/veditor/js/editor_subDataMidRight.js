@@ -43,62 +43,6 @@ config.createNewEditor = function (type, tabName)
     return 'i' + config.editorUniqueIdx;
 }
 
-eventConfig.onclick_handles['subDataMidRight_CMD_CmdRun'] = function (tag, event)
-{
-    let id = tag.parentNode.id;
-    let cmd = document.getElementById(id + '_CmdInput').value; if (cmd == null || cmd == '') return;
-
-    restClient.call(
-        "shellSync",
-        {
-            "cmd": cmd
-        },
-        'JSON',
-        function (sts, obj, args, es)
-        {
-            let [stsTag, resTag, btnTag, inTag, cmd] = args;
-            stsTag.textContent = "DONE !";
-            btnTag.removeAttribute('disabled');
-            inTag.value = "";
-
-            let firstLine = 'Command Run (Status ' + obj.status + ') :\n' + cmd + '\n\n';
-            let stdout = 'STDOUT :\n', stderr = '\nSTDERR :\n';
-            if (obj.stdout)
-                stdout += config.libStringOps.stringFromCharCodeArray(obj.stdout.data);
-            if (obj.stderr)
-                stderr += config.libStringOps.stringFromCharCodeArray(obj.stderr.data);
-
-            let resData = document.createElement("pre");
-            resData.appendChild(document.createTextNode(firstLine));
-            resData.appendChild(document.createTextNode(stdout));
-            if (obj.stderr)
-                resData.appendChild(document.createTextNode(stderr));
-            resTag.prepend(document.createElement("hr"));
-            resTag.prepend(resData);
-        },
-        [
-            document.getElementById(id + '_CmdStatus'),
-            document.getElementById(id + '_CmdResultSet'),
-            document.getElementById(id + '_CmdRun'),
-            document.getElementById(id + '_CmdInput'),
-            cmd
-        ],
-        function (obj, args)
-        {
-            let [stsTag, resTag, btnTag, inTag, cmd] = args;
-            stsTag.textContent = "RUNNING !";
-            btnTag.setAttribute('disabled', true);
-        }
-    );
-}
-eventConfig.onclick_handles['subDataMidRight_CMD_CmdClear'] = function (tag, event)
-{
-    let id = tag.parentNode.id;
-    document.getElementById(id + '_CmdInput').value = "";
-    document.getElementById(id + '_CmdResultSet').innerHTML = "";
-    document.getElementById(id + '_CmdStatus').textContent = "";
-}
-
 eventConfig.onload_handles.push(
     function ()
     {
