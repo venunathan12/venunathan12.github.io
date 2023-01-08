@@ -1,0 +1,126 @@
+body
+{
+    height: 97.5%;
+    width: 98%;
+}
+pre
+{
+    display: inline;
+}
+input
+{
+    width: 100%;
+}
+textarea
+{
+    width: 100%;
+    resize: vertical;
+    white-space: pre;
+    overflow-wrap: normal;
+    overflow-x: scroll;
+}
+
+.miniTools
+{
+    height: 100%;
+    width: 3%;
+    background: blue;
+    float: left;
+    user-select: none;
+}
+.mainTools
+{
+    height: 100%;
+    width: 17%;
+    background: lightblue;
+    float: left;
+    overflow-x: scroll; overflow-y: scroll;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.mainData
+{
+    height: 100%;
+    width: 80%;
+    float: left;
+}
+.subDataTop
+{
+    height: 6%;
+    width: 100%;
+    background: aqua;
+    overflow-x: scroll;
+    user-select: none;
+    white-space: nowrap;
+}
+.subDataMid
+{
+    height: 88%;
+    width: 100%;    
+    overflow-x: scroll; overflow-y: scroll;
+}
+.subDataBot
+{
+    height: 6%;
+    width: 100%;
+    background: aqua;
+    overflow-x: scroll;
+    user-select: none;
+    white-space: nowrap;
+}
+.subDataMidLeft
+{
+    min-height: 100%;
+    min-width: 2%;
+    background-color: yellow;
+    float: left;
+    user-select: none;
+}
+.subDataMidRight
+{
+    min-height: 100%;
+    min-width: 98%;
+    outline: none;
+    white-space: nowrap;
+}
+.subDataBotRight
+{
+    float: left;
+}
+.subDataBotRightOptions
+{
+    display: none;
+}
+
+.miniTools_ContentBank, .mainTools_ContentBank, .subDataMidRight_ContentBank
+{
+    width: 100%;
+}
+.miniTools_ContentBank > img
+{
+    width: 100%;
+}
+.subDataMidRight_ContentBank > div
+{
+    width: 100%;
+}
+
+.mainTools_Projects
+{
+    width: 100%;
+}
+
+.subDataMidRight_CMD_CmdInput
+{
+    width: 70%;
+}
+.subDataMidRight_CMD_CmdRun, .subDataMidRight_CMD_CmdClear
+{
+    width: 15%;
+}
+.subDataMidRight_TextEditor
+{
+    min-height: 100%;
+    outline: none;
+}

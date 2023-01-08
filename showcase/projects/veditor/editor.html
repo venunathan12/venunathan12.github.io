@@ -1,0 +1,270 @@
+<html>
+    <head>
+        <title>The Text Editor</title>        
+        <link rel="stylesheet" href="css/editor.css">
+        <script src="js/lib/aes.js"></script>
+        <script src="js/lib/jszip.js"></script>
+        <script src="js/lib/common.js"></script>
+        <script src="js/lib/xjson.js"></script>
+        <script src="js/lib/editorManager.js"></script>
+        <script src="js/lib/textManager.js"></script>
+        <script src="js/lib/textUpdateManager.js"></script>
+        <script src="js/lib/binds.js"></script>
+        <script src="js/lib/clones.js"></script>
+        <script src="js/lib/stringOps.js"></script>
+        <script src="js/lib/elemOps.js"></script>
+        <script src="js/editor.js"></script>
+        <script src="js/editor_miniTools.js"></script>
+        <script src="js/editor_mainTools.js"></script>
+        <script src="js/editor_subDataTop.js"></script>
+        <script src="js/editor_subDataMidRight.js"></script>
+        <script src="js/editor_subDataBot.js"></script>
+    </head>
+    <body onload="onload_handle()">
+        <div class="miniTools">
+            <div class="miniTools_ContentBank" id="miniTools_OpenCloseMainTools">
+                <img src="others/mainTools_CLOSE.png" id="miniTools_OpenCloseMainTools_CLOSE" style="width: 50%; float: left;" onclick="onclick_handle(this, event)">
+                <img src="others/mainTools_OPEN.png" id="miniTools_OpenCloseMainTools_OPEN" style="width: 50%; float: left;" onclick="onclick_handle(this, event)">
+            </div>
+            <div class="miniTools_ContentBank">
+                <img src="others/plain_blue.png">
+            </div>
+            <div class="miniTools_ContentBank" id="miniTools_Projects" onclick="onclick_handle(this, event)">
+                <img src="others/mainTools_Projects.png">
+            </div>
+            <div class="miniTools_ContentBank" id="miniTools_Files" onclick="onclick_handle(this, event)">
+                <img src="others/mainTools_Files.png">
+            </div>
+            <div class="miniTools_ContentBank" id="miniTools_ProjFiles" onclick="onclick_handle(this, event)">
+                <img src="others/mainTools_ProjFiles.png">
+            </div>
+            <div class="miniTools_ContentBank" id="miniTools_BindRegions" onclick="onclick_handle(this, event)">
+                <img src="others/mainTools_BindRegions.png">
+            </div>
+            <div class="miniTools_ContentBank" id="miniTools_Binds" onclick="onclick_handle(this, event)">
+                <img src="others/mainTools_Binds.png">
+            </div>
+            <div class="miniTools_ContentBank" id="miniTools_CloneCats" onclick="onclick_handle(this, event)">
+                <img src="others/mainTools_CloneCats.png">
+            </div>
+            <div class="miniTools_ContentBank" id="miniTools_Clones" onclick="onclick_handle(this, event)">
+                <img src="others/mainTools_Clones.png">
+            </div>
+        </div>
+        <div class="mainTools" id="mainTools">
+            <div class="mainTools_ContentBank" id="mainTools_ToolBox">
+                <div class="mainTools_Projects" id="mainTools_Projects" hidden>
+                    <h3>Projects</h3>
+                    <hr>
+                    <span id="mainTools_Projects_Status"></span><br><br>
+                    <button id="mainTools_Projects_Create">Create New Project</button><br><br>
+                    <input id="mainTools_Projects_Open_Zip" type="file" /><br>
+                    <button id="mainTools_Projects_Open">Open Project from Zip</button><br>
+                </div>
+                <div class="mainTools_Files" id="mainTools_Files" hidden>
+                    <h3>Files</h3>
+                    <hr>
+                    <div id="mainTools_Files_noProj" hidden>
+                        Please open a project.
+                    </div>
+                    <div id="mainTools_Files_contentProj" hidden></div>
+                    <div id="mainTools_Files_contentProj_File_Template" hidden>
+                        <pre class="mainTools_Files_contentProj_File_Part_Indent">[INDENT]</pre><pre class="mainTools_Files_contentProj_File_Part_Open" onclick="onclick_handle(this, event)">[+]</pre>
+                        <pre class="mainTools_Files_contentProj_File_Part_File" onclick="onclick_handle(this, event)">[FILENAME]</pre>
+                        <pre class="mainTools_Files_contentProj_File_Part_Comments" onclick="onclick_handle(this, event)"></pre>
+                    </div>
+                </div>
+                <div class="mainTools_ProjFiles" id="mainTools_ProjFiles" hidden>
+                    <h3>Files in Project</h3>
+                    <hr>
+                    <div id="mainTools_ProjFiles_noProj" hidden>
+                        Please open a project.
+                    </div>
+                    <div id="mainTools_ProjFiles_contentProj" hidden>
+                        <button id="mainTools_ProjFiles_contentProj_SaveAll" onclick="onclick_handle(this, event)">Save All</button><br>
+                        <button id="mainTools_ProjFiles_contentProj_Download" onclick="onclick_handle(this, event)">Download Zip</button><br>
+                        <span id="mainTools_ProjFiles_contentProj_SaveAll_sts"></span><br><br>
+                        Currently loaded files:
+                        <div id="mainTools_ProjFiles_contentProj_OpenList"></div>
+                        <div id="mainTools_ProjFiles_contentProj_OpenList_ItemTemplate" hidden><pre class="mainTools_ProjFiles_contentProj_OpenList_Item" onclick="onclick_handle(this, event)">[PATH]</pre><br></div>
+                    </div>
+                </div>
+                <div class="mainTools_BindRegions" id="mainTools_BindRegions" hidden>
+                    <h3>Bind Regions</h3>
+                    <hr>
+                    <div id="mainTools_BindRegions_noProj" hidden>
+                        Please open a project.
+                    </div>
+                    <div id="mainTools_BindRegions_noEditor" hidden>
+                        Please open an editor tab.
+                    </div>
+                    <div id="mainTools_BindRegions_contentProj" hidden>
+                        <button id="mainTools_BindRegions_contentProj_Create">New Bind Region</button><br>
+                        <span id="mainTools_BindRegions_contentProj_Create_STS"></span><br>
+                        <br>
+                        <div id="mainTools_BindRegions_contentProj_Create_Details" hidden>
+                            Selection :<br><span id="mainTools_BindRegions_contentProj_Create_SelText"></span><br><br>
+                            Region Name :<br><input id="mainTools_BindRegions_contentProj_Create_RgnNm"/><br><br>
+                            Update Attempt Intercept :<br><textarea id="mainTools_BindRegions_contentProj_Create_UpdtAtmt"></textarea><br>Presets : <button class="mainTools_BindRegions_contentProj_Create_UpdtAtmt_Preset">1</button><button class="mainTools_BindRegions_contentProj_Create_UpdtAtmt_Preset">2</button><button class="mainTools_BindRegions_contentProj_Create_UpdtAtmt_Preset">3</button><br><br>
+                            Update Completion Intercept :<br><textarea id="mainTools_BindRegions_contentProj_Create_UpdtCmpl"></textarea><br>Presets : <button class="mainTools_BindRegions_contentProj_Create_UpdtCmpl_Preset">1</button><button class="mainTools_BindRegions_contentProj_Create_UpdtCmpl_Preset">2</button><button class="mainTools_BindRegions_contentProj_Create_UpdtCmpl_Preset">3</button><br><br>
+                            <button id="mainTools_BindRegions_contentProj_CreateNewBR">Create/Update Bind Region</button><button id="mainTools_BindRegions_contentProj_CancelNewBR">Cancel</button><br><span id="mainTools_BindRegions_contentProj_CreateNewBR_STS"></span><br>
+                        </div>
+                        <br><br>                        
+                        <hr>
+                        Currently existing Regions<br><br>
+                        <div id="mainTools_BindRegions_contentProj_Regions_List"></div>
+                        <div id="mainTools_BindRegions_contentProj_Regions_Template" class="mainTools_BindRegions_contentProj_Regions" hidden><pre class="mainTools_BindRegions_contentProj_Regions_Close">[X]</pre> <pre class="mainTools_BindRegions_contentProj_Regions_Copy">[C]</pre> <pre class="mainTools_BindRegions_contentProj_Regions_Name"></pre> <br></div>
+                    </div>
+                </div>
+                <div class="mainTools_Binds" id="mainTools_Binds" hidden>
+                    <h3>Binds</h3>
+                    <hr>
+                    <div id="mainTools_Binds_noProj" hidden>
+                        Please open a project.
+                    </div>
+                    <div id="mainTools_Binds_contentProj" hidden>
+                        Bind Name :<br><input id="mainTools_Binds_contentProj_Name"/><br><br>
+                        From :<br><textarea id="mainTools_Binds_contentProj_From"></textarea><br>
+                        To :<br><input id="mainTools_Binds_contentProj_To"/><br><br>
+                        Intercept :<br><textarea id="mainTools_Binds_contentProj_Int"></textarea><br>
+                        Presets : <button class="mainTools_Binds_contentProj_Int_Preset">1</button><button class="mainTools_Binds_contentProj_Int_Preset">2</button><button class="mainTools_Binds_contentProj_Int_Preset">3</button><br><br>
+                        <button id="mainTools_Binds_contentProj_Create">Create/Update Bind</button><button id="mainTools_Binds_contentProj_Clear">Clear</button><br>
+                        <span id="mainTools_Binds_contentProj_STS"></span>
+                        <br><br>                        
+                        <hr>
+                        Currently existing Binds<br><br>
+                        <div id="mainTools_Binds_contentProj_Binds_List"></div>
+                        <div id="mainTools_Binds_contentProj_Binds_Template" class="mainTools_Binds_contentProj_Binds" hidden><pre class="mainTools_Binds_contentProj_Binds_Close">[X]</pre> <pre class="mainTools_Binds_contentProj_Binds_Copy">[C]</pre> <pre class="mainTools_Binds_contentProj_Binds_Name"></pre> <br></div>
+                    </div>
+                </div>
+                <div class="mainTools_CloneCats" id="mainTools_CloneCats" hidden>
+                    <h3>Clone Categories</h3>
+                    <hr>
+                    <div id="mainTools_CloneCats_noProj" hidden>
+                        Please open a project.
+                    </div>
+                    <div id="mainTools_CloneCats_contentProj" hidden>
+                        Clone Category Name :<br><input id="mainTools_CloneCats_contentProj_Name"/><br><br>
+                        Bind Regions :<br><textarea id="mainTools_CloneCats_contentProj_BindRegions" onfocus="onfocus_handle(this, event)"></textarea><br>
+                        Binds :<br><textarea id="mainTools_CloneCats_contentProj_Binds" onfocus="onfocus_handle(this, event)"></textarea><br><br>
+                        <button id="mainTools_CloneCats_contentProj_BTN_validateStructure">Validate Structure</button><br>
+                        <span id="mainTools_CloneCats_contentProj_STS_validateStructure"></span><br><br>
+                        Bind Region Capture Type:<br>
+                        <div id="mainTools_CloneCats_contentProj_DATA_BindRegionCapTypes"></div><br>
+                        Bind Capture Type:<br>
+                        <div id="mainTools_CloneCats_contentProj_DATA_BindCapTypes"></div><br>
+                        <button id="mainTools_CloneCats_contentProj_BTN_Create">Create/Update Clone Category</button><button id="mainTools_CloneCats_contentProj_BTN_Clear">Clear</button><br>
+                        <span id="mainTools_CloneCats_contentProj_STS_Create"></span><br><br>
+                        <hr>
+                        Currently existing Clone Categories<br><br>
+                        <div id="mainTools_CloneCats_contentProj_CloneCats_List"></div>
+                        <div id="mainTools_CloneCats_contentProj_CloneCats_Template" class="mainTools_CloneCats_contentProj_CloneCats" hidden><pre class="mainTools_CloneCats_contentProj_CloneCats_Close">[X]</pre> <pre class="mainTools_CloneCats_contentProj_CloneCats_Copy">[C]</pre> <pre class="mainTools_CloneCats_contentProj_CloneCats_Name"></pre> <br></div>
+                    </div>
+                    <div id="mainTools_CloneCats_contentProj_BindRegionCapType_Template" hidden>
+                        [NAME]: <select id="mainTools_CloneCats_contentProj_BindRegionCapType_[IDX]"><option value="F">Fixed</option><option value="CN">Capture by Name</option><option value="CS">Capture by Selection</option><option value="CR">Create</option><option value="CSCR">Capture by Selection else Create</option></select><br>
+                    </div>
+                    <div id="mainTools_CloneCats_contentProj_BindCapType_Template" hidden>
+                        [NAME]: <select id="mainTools_CloneCats_contentProj_BindCapType_[IDX]"><option value="CR">Create</option></select><br>
+                    </div>
+                </div>
+                <div class="mainTools_Clones" id="mainTools_Clones" hidden>
+                    <h3>Clones</h3>
+                    <hr>
+                    <div id="mainTools_Clones_noProj" hidden>
+                        Please open a project.
+                    </div>
+                    <div id="mainTools_Clones_contentProj" hidden>
+                        Clone Category Name :<br><input id="mainTools_Clones_contentProj_CloneCatName"/><br>
+                        <button id="mainTools_Clones_contentProj_BNT_BeginCreate">Begin Clone Creation</button><br>
+                        <span id="mainTools_Clones_contentProj_STS_BeginCreate"></span><br><br>
+                        Bind Region Capture :<br><br>
+                        <div id="mainTools_Clones_contentProj_DATA_CloneBindRegionCapData"></div><br>
+                        Bind Capture :<br><br>
+                        <div id="mainTools_Clones_contentProj_DATA_CloneBindCapData"></div><br>
+                        <button id="mainTools_Clones_contentProj_BNT_Create">Create Clone</button><button id="mainTools_Clones_contentProj_BNT_Cancel">Cancel</button><br>
+                        <span id="mainTools_Clones_contentProj_STS_Create"></span><br><br>
+                    </div>
+                    <div id="mainTools_Clones_contentProj_CloneBindRegionCap_Template_F" hidden>
+                        <div id="mainTools_Clones_contentProj_CloneBindRegionCap_[IDX]">
+                            [IDX]<br>
+                            Capture from fixed Bind Region<br>
+                            <input class="mainTools_Clones_contentProj_CloneBindRegionCap_IN_Name" disabled/><br>
+                            <button class="mainTools_Clones_contentProj_CloneBindRegionCap_BNT_Cap_F">Capture</button><br>
+                            Status: <span class="mainTools_Clones_contentProj_CloneBindRegionCap_STS">PENDING</span><input class="mainTools_Clones_contentProj_CloneBindRegionCap_DATA" hidden/>
+                        </div>
+                        <br>
+                    </div>
+                    <div id="mainTools_Clones_contentProj_CloneBindRegionCap_Template_CN" hidden>
+                        <div id="mainTools_Clones_contentProj_CloneBindRegionCap_[IDX]">
+                            [IDX]<br>
+                            Capture from Bind Region by Name<br>
+                            <input class="mainTools_Clones_contentProj_CloneBindRegionCap_IN_Name"/><br>
+                            <button class="mainTools_Clones_contentProj_CloneBindRegionCap_BNT_Cap_CN">Capture</button><br>
+                            Status: <span class="mainTools_Clones_contentProj_CloneBindRegionCap_STS">PENDING</span><input class="mainTools_Clones_contentProj_CloneBindRegionCap_DATA" hidden/>
+                        </div>
+                        <br>
+                    </div>
+                    <div id="mainTools_Clones_contentProj_CloneBindRegionCap_Template_CS" hidden>
+                        <div id="mainTools_Clones_contentProj_CloneBindRegionCap_[IDX]">
+                            [IDX]<br>
+                            Capture from Bind Region by Selection<br>
+                            <button class="mainTools_Clones_contentProj_CloneBindRegionCap_BNT_Cap_CS">Capture</button><br>
+                            Selection: <span class="mainTools_Clones_contentProj_CloneBindRegionCap_INFO_Sel"></span><br>
+                            Status: <span class="mainTools_Clones_contentProj_CloneBindRegionCap_STS">PENDING</span><input class="mainTools_Clones_contentProj_CloneBindRegionCap_DATA" hidden/>
+                        </div>
+                        <br>
+                    </div>
+                    <div id="mainTools_Clones_contentProj_CloneBindRegionCap_Template_CR" hidden>
+                        <div id="mainTools_Clones_contentProj_CloneBindRegionCap_[IDX]">
+                            [IDX]<br>
+                            Create new Bind Region<br>
+                            <button class="mainTools_Clones_contentProj_CloneBindRegionCap_BNT_Cap_CR">Capture</button><br>
+                            Selection: <span class="mainTools_Clones_contentProj_CloneBindRegionCap_INFO_Sel"></span><br>
+                            Status: <span class="mainTools_Clones_contentProj_CloneBindRegionCap_STS">PENDING</span><input class="mainTools_Clones_contentProj_CloneBindRegionCap_DATA" hidden/>
+                        </div>
+                        <br>
+                    </div>
+                    <div id="mainTools_Clones_contentProj_CloneBindRegionCap_Template_CSCR" hidden>
+                        <div id="mainTools_Clones_contentProj_CloneBindRegionCap_[IDX]">
+                            [IDX]<br>
+                            Capture from Bind Region by Selection, else Create new Bind Region<br>
+                            <button class="mainTools_Clones_contentProj_CloneBindRegionCap_BNT_Cap_CSCR">Capture</button><br>
+                            Selection: <span class="mainTools_Clones_contentProj_CloneBindRegionCap_INFO_Sel"></span><br>
+                            Status: <span class="mainTools_Clones_contentProj_CloneBindRegionCap_STS">PENDING</span><input class="mainTools_Clones_contentProj_CloneBindRegionCap_DATA" hidden/>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mainData" id="mainData">
+            <div class="subDataTop" id="subDataTop">
+                <u id="subDataTopTab_Template" class="subDataTopTab" onclick hidden><tt>[[TYPE]]</tt> <tt>[NAME]</tt> <tt class="subDataTopTab_Delete" onclick>[X]</tt></u>
+            </div>
+            <div class="subDataMid">
+                <div class="subDataMidLeft" id="subDataMidLeft"></div>
+                <div class="subDataMidRight" id="subDataMidRight">
+                    <div class="subDataMidRight_ContentBank" id="subDataMidRight_ContentBank_Templates" hidden>
+                        <div id="subDataMidRight_ContentBank_Templates_CMD">
+                            <input id="[ID]_CmdInput" class="subDataMidRight_CMD_CmdInput"/><button id="[ID]_CmdRun" class="subDataMidRight_CMD_CmdRun" onclick>Run Command</button><button id="[ID]_CmdClear" class="subDataMidRight_CMD_CmdClear" onclick>Clear</button><br>
+                            <tt id="[ID]_CmdStatus" class="subDataMidRight_CMD_CmdStatus"></tt><hr><div id="[ID]_CmdResultSet" class="subDataMidRight_CMD_CmdResultSet"></div>
+                        </div>
+                        <div id="subDataMidRight_ContentBank_Templates_TEXT" class="subDataMidRight_TextEditor" tabindex="0" onmouseup onkeydown onpaste hidden></div>
+                    </div>
+                    <div class="subDataMidRight_ContentBank" id="subDataMidRight_Editors"></div>
+                </div>
+            </div>
+            <div class="subDataBot">
+                <div class="subDataBotRight">
+                    Selection: [<span id="subDataBotRightSelectionStart"></span>] to [<span id="subDataBotRightSelectionEnd"></span>] (<span id="subDataBotRightSelectionLength">0</span> bytes)
+                    <pre>      | </pre>
+                    <div class="subDataBotRightOptions" id="subDataBotRightOptions_TEXT">
+                        <span class="subDataBotRightOptions_TEXT_Item" onclick="onclick_handle(this, event)">[D]</span>
+                        <span class="subDataBotRightOptions_TEXT_Item" onclick="onclick_handle(this, event)">[BR]</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="downloadsPort" hidden></div>
+    </body>
+</html>
