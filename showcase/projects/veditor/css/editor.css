@@ -19,6 +19,11 @@ textarea
     overflow-wrap: normal;
     overflow-x: scroll;
 }
+p
+{
+    width: 100%;
+    white-space: normal;
+}
 
 .miniTools
 {

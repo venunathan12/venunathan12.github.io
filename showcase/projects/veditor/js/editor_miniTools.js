@@ -84,3 +84,10 @@ eventConfig.onclick_handles["miniTools_Clones"] = function (tag, event)
     if (config.mainToolsOpenLevel == 0)
         config.mainToolsOpen_update(1);
 }
+eventConfig.onclick_handles["miniTools_Help"] = function (tag, event)
+{
+    config.mainTools_select(7);
+    config.clonesSectionUpdate();
+    if (config.mainToolsOpenLevel == 0)
+        config.mainToolsOpen_update(1);
+}

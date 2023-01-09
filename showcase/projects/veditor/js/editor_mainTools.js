@@ -123,10 +123,12 @@ eventConfig.onclick_handles['mainTools_Projects_Create'] = async function(tag, e
 }
 eventConfig.onclick_handles['mainTools_Projects_Open'] = async function(tag, event)
 {
-    config.selectedProject = 'project';
     let stsTag = document.getElementById('mainTools_Projects_Status');
-
-    let file = document.getElementById('mainTools_Projects_Open_Zip').files[0];
+    let fileTag = document.getElementById('mainTools_Projects_Open_Zip');
+    let filePath = fileTag.value; 
+    let file = fileTag.files[0];
+    config.selectedProject = filePath.split(/[\/\\]/).at(-1).split('.').at(0);
+    
     let zip = JSZip();
 
     if (file == null)

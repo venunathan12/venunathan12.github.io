@@ -19,6 +19,7 @@
         <script src="js/editor_subDataTop.js"></script>
         <script src="js/editor_subDataMidRight.js"></script>
         <script src="js/editor_subDataBot.js"></script>
+        <script src="js/editor_help.js"></script>
     </head>
     <body onload="onload_handle()">
         <div class="miniTools">
@@ -49,6 +50,12 @@
             </div>
             <div class="miniTools_ContentBank" id="miniTools_Clones" onclick="onclick_handle(this, event)">
                 <img src="others/mainTools_Clones.png">
+            </div>
+            <div class="miniTools_ContentBank">
+                <img src="others/plain_blue.png">
+            </div>
+            <div class="miniTools_ContentBank" id="miniTools_Help" onclick="onclick_handle(this, event)">
+                <img src="others/mainTools_Help.png">
             </div>
         </div>
         <div class="mainTools" id="mainTools">
@@ -233,6 +240,30 @@
                             Status: <span class="mainTools_Clones_contentProj_CloneBindRegionCap_STS">PENDING</span><input class="mainTools_Clones_contentProj_CloneBindRegionCap_DATA" hidden/>
                         </div>
                         <br>
+                    </div>
+                </div>
+                <div class="mainTools_Help" id="mainTools_Help" hidden>
+                    <h3>Help</h3>
+                    <hr>
+                    <p>This is a Text Editor which allows users to mark regions of text in files, and run custom logic when these regions are updated.<br>These regions can also be chained together, such that updating one region automatically updates another region based on some logic decided by the user.</p>
+                    <p>Further details can be read by clicking on the following headings.</p>
+                    <p>For a video briefly explaining this project, please click the link below:<br><a href="">LINK</a></p>
+                    <h4 class="mainTools_Help_SectionTitle" onclick="onclick_handle(this, event)">Basic Info</h4>
+                    <div hidden>
+                        <p>The 2 triangles at the top left corner can be used to expand, shrink or hide this region.</p>
+                        <p>The icons below the triangles, each opens one section.<br>We are currently at the Help Section.</p>
+                    </div>
+                    <h4 class="mainTools_Help_SectionTitle" onclick="onclick_handle(this, event)">Basic Usage Flow</h4>
+                    <div hidden>
+                        <p>789</p>
+                    </div>
+                    <h4 class="mainTools_Help_SectionTitle" onclick="onclick_handle(this, event)">Section: Projects</h4>
+                    <div hidden>
+                        <p>123</p>
+                    </div>
+                    <h4 class="mainTools_Help_SectionTitle" onclick="onclick_handle(this, event)">Section: Files</h4>
+                    <div hidden>
+                        <p>456</p>
                     </div>
                 </div>
             </div>

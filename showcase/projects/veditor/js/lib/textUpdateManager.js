@@ -20,7 +20,7 @@ config.libTextUpdateManager.CLASS = class
 
     __processItem(itemIdx, item)
     {
-        if (itemIdx > 1000) throw ("LONG: TOO MUCH WORK !");
+        if (itemIdx > 1000) throw ("LONG: TOO MANY UPDATES !");
         let textMgr = item[0], operation = item[1], args = item[2];
 
         if (typeof operation == 'object')
@@ -61,7 +61,11 @@ config.libTextUpdateManager.CLASS = class
                 let intercept = br.fAtmt(updateDetails, br.getCurrent(), this.trail, br);
 
                 canUpdate = canUpdate && (intercept.startsWith('ALLOW'));
-                if (intercept.startsWith('RAISE')) console.log('BindRegion: ', br.name, br.path, intercept);
+                if (intercept.startsWith('RAISE'))
+                {
+                    console.log('BindRegion: ', br.name, br.path, intercept);
+                    return false;
+                }
             }
             if (! canUpdate) return;
 
@@ -136,7 +140,11 @@ config.libTextUpdateManager.CLASS = class
                 let intercept = br.fAtmt(updateDetails, br.getCurrent(), this.trail, br);
 
                 canUpdate = canUpdate && (intercept.startsWith('ALLOW'));
-                if (intercept.startsWith('RAISE')) console.log('BindRegion: ', br.name, br.path, intercept);
+                if (intercept.startsWith('RAISE'))
+                {
+                    console.log('BindRegion: ', br.name, br.path, intercept);
+                    return false;
+                }
             }
             if (! canUpdate) return;
             
@@ -190,6 +198,7 @@ config.libTextUpdateManager.CLASS = class
     __processQueue()
     {
         for (let i = 0; i < this.queue.length; i++)
-            this.__processItem(i, this.queue[i]);
+            if (this.__processItem(i, this.queue[i]) == false)
+                break;
     }
 }
