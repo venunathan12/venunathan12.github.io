@@ -577,15 +577,15 @@ config.bindregionsCurrentPlannedRegion = null;
 
 config.bindregionsInterceptTextDefault = "function (updateDetails, current, trail, region)\n{}";
 config.bindregionsInterceptTextPresets = ['',
-    "function (updateDetails, current, trail, region)\n{\n    // Irrespective of type, allow updates to this region\n    // But do not trigger bindings attached to this region\n    return 'ALLOW';\n}",
-    "PQ\n\n\nRS",
-    "PQ\nRS"
+    "function (updateDetails, current, trail, region)\n{\n    // Allow all updates to this region\n\n    return 'ALLOW';\n}\n",
+    "function (updateDetails, current, trail, region)\n{\n    // Allow updates to this region only through Binds\n    // This region cannot be edited using Keyboard\n\n    if (updateDetails.type == 'BIND')\n        return 'ALLOW';\n    else\n        return 'BLOCK';\n}\n",
+    "function (updateDetails, current, trail, region)\n{\n    // Allow updates to this region\n    // only if this is the first time this region\n    // is being updated in the current chain\n\n\n    if (trail[region.name])\n        return 'BLOCK';\n\n    trail[region.name] = true;\n    return 'ALLOW';\n}\n"
 ];
 config.bindregionsCInterceptTextDefault = "function (updateDetails, previous, current, trail, region)\n{}";
 config.bindregionsCInterceptTextPresets = ['',
-    "function (updateDetails, previous, current, trail, region)\n{\n    // Irrespective of type, allow updates to this region\n    // But do not trigger bindings attached to this region\n    return 'DONE';\n}",
-    "PQ\n\n\nRS123",
-    "PQ\nRS"
+    "function (updateDetails, previous, current, trail, region)\n{\n    // No Binds will be triggered after this region is updated\n\n    return;\n}\n",
+    "function (updateDetails, previous, current, trail, region)\n{\n    // All Binds starting from this region\n    // will be triggered after this region is updated\n\n    return 'PROPAGATE';\n}\n",
+    "function (updateDetails, previous, current, trail, region)\n{\n    // If this region was modified during this update\n    // then all Binds starting from this region\n    // will be triggered\n\n    if (current != previous)\n        return 'PROPAGATE';\n    else\n        return;\n}\n"
 ];
 
 config.bindregionsSectionUpdate = function ()
@@ -843,9 +843,9 @@ config.bindsListTemplate = null;
 
 config.bindsInterceptTextDefault = "function (args, current, trail, region)\n{}";
 config.bindsInterceptTextPresets = ['',
-    "function (args, current, trail, region)\n{}",
-    "PQ\n\n\nRS",
-    "PQ\nRS"
+    "function (args, current, trail, region)\n{\n    // Set the text of the following region\n    // to a constant value\n\n    return 'Any String Literal !';\n}\n",
+    "function (args, current, trail, region)\n{\n    // Derive the new text of the following region\n    // based on the text of the input regions\n\n    let outString = args.join(', ');\n    return outString;\n}\n",
+    "function (args, current, trail, region)\n{\n    // Let the following region retain\n    // its current text\n\n    return current;\n}\n"
 ];
 
 config.bindsSectionUpdate = function ()
