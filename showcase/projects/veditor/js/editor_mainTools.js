@@ -388,19 +388,20 @@ eventConfig.onclick_handles["mainTools_Files_contentProj_File_Part_File"] = asyn
     }
     else
     {
+        let zip = config.selectedProjectZip;
         let name = prompt('Name of new file/folder: (empty to cancel)');
         if (name == null || name == '')
             return;
 
         if (name.includes('.'))
         {
-            let zip = config.selectedProjectZip;
             currObj.items[name] = config.filesNewFileDescriptor();
             zip.file(pathStrZip + '/' + name, '');
         }
         else
         {
             currObj.items[name] = config.filesNewDirectoryDescriptor();
+            zip.folder(pathStrZip + '/' + name);
         }
     }
     config.filesRenderList();
@@ -534,6 +535,8 @@ eventConfig.onclick_handles["mainTools_ProjFiles_contentProj_Download"] = async 
 
 eventConfig.onclick_handles["mainTools_ProjFiles_contentProj_OpenList_Item"] = function (tag, event)
 {
+    if (tag.textContent == './') return;
+
     let pathStr = tag.textContent;
     let fileName = pathStr;
     if (fileName.endsWith('/')) fileName = fileName.slice(0, -1);

@@ -65,7 +65,7 @@
                     <hr>
                     <span id="mainTools_Projects_Status"></span><br><br>
                     <button id="mainTools_Projects_Create">Create New Project</button><br><br>
-                    <input id="mainTools_Projects_Open_Zip" type="file" /><br>
+                    <input id="mainTools_Projects_Open_Zip" type="file" accept=".zip" /><br>
                     <button id="mainTools_Projects_Open">Open Project from Zip</button><br>
                 </div>
                 <div class="mainTools_Files" id="mainTools_Files" hidden>
@@ -255,15 +255,60 @@
                     </div>
                     <h4 class="mainTools_Help_SectionTitle" onclick="onclick_handle(this, event)">Basic Usage Flow</h4>
                     <div hidden>
-                        <p>789</p>
+                        <p>1. User creates a new project in the Projects section.</p>
+                        <p>2. User adds new files to their project using the instructions for Files section.</p>
+                        <p>3. User updates the files in their project like using a regular text editor.</p>
+                        <p>4. Occassionally, the user may use the Bind Regions section and Binds section to quickly update parts of their text when some other text is updated.</p>
+                        <p>5. Occassionally, the user may use the Clone Categories section and Clones section to quickly create duplicates on existing Binds.</p>
+                        <p>6. User saves their project and downloads it as a zip file from the Files in Project section.</p>
+                        <p>7. User uses this zip file in the Projects section later to open and continue working on their project.</p>
+                        <p>Repeat from Step 2.</p>
                     </div>
                     <h4 class="mainTools_Help_SectionTitle" onclick="onclick_handle(this, event)">Section: Projects</h4>
                     <div hidden>
-                        <p>123</p>
+                        <p>A project refers to collection of files and folders which can be edited using this editor.<br>This section is used to create a new project or to load an existing project using the zip file created when saving the project.</p>
+                        <p>To create a new project:<br>Click the button with label 'Create New Project'.</p>
+                        <p>To open an existing project:<br>Click the button with label 'Choose File'. This must be a zip file which was created by this editor while saving a project.<br>Then click the button with label 'Open Project from Zip'.</p>
+                        <p>To close a project and create/open another project:<br>Refresh the page.<br>Follow the previous instructions to create/open a project.</p>
                     </div>
                     <h4 class="mainTools_Help_SectionTitle" onclick="onclick_handle(this, event)">Section: Files</h4>
                     <div hidden>
-                        <p>456</p>
+                        <p>This section shows the files and folders present in the current project.<br>New files and folders can be created using this section.</p>
+                        <p>The outermost folder named '.' is the root directory of the project.<br>The content of folders can be shown or hidden by clicking the '+' or '-' symbol to the left of their name.</p>
+                        <p>Clicking on the name of a file will open a tab where the contents of the file can be edited.<br>Clicking on the name of a folder will raise a prompt for creating new file/folder. A new file or folder will be created based on the content entered into the prompt.</p>
+                        <p>Note:<br>Currently, the names of a file must contain a '.' character.<br>Currently, the names of a folder must not contain a '.' character.</p>
+                        <p>To add new files to the project from outside of this editor:<br>Download the project as a Zip file.<br>Add the required files in the existing folder named 'proj' in the Zip file.<br>Refresh this page and open the project using the modified Zip file.</p>
+                    </div>
+                    <h4 class="mainTools_Help_SectionTitle" onclick="onclick_handle(this, event)">Section: Files in Project</h4>
+                    <div hidden>
+                        <p>This section shows a list of files in the project which are being edited.<br>Clicking the path of the file will open an tab where the file can be edited.</p>
+                        <p>Click the button with label 'Save All' to save the changes made to all the files in the project.</p>
+                        <p>Click the button with label 'Download Zip' to download the current state of the project as a Zip file.<br>This Zip file can be used to open this project later.<br>Note: If you have made changes to some of the files in the project and not clicked the button with label 'Save All', then the downloaded Zip file will not contain the changes.</p>
+                    </div>
+                    <h4 class="mainTools_Help_SectionTitle" onclick="onclick_handle(this, event)">File Editor Tab</h4>
+                    <div hidden>
+                        <p>0</p>
+                    </div>
+                    <h4 class="mainTools_Help_SectionTitle" onclick="onclick_handle(this, event)">Section: Bind Regions</h4>
+                    <div hidden>
+                        <p>0</p>
+                    </div>
+                    <h4 class="mainTools_Help_SectionTitle" onclick="onclick_handle(this, event)">Section: Binds</h4>
+                    <div hidden>
+                        <p>0</p>
+                    </div>
+                    <h4 class="mainTools_Help_SectionTitle" onclick="onclick_handle(this, event)">Section: Clone Categories</h4>
+                    <div hidden>
+                        <p>0</p>
+                    </div>
+                    <h4 class="mainTools_Help_SectionTitle" onclick="onclick_handle(this, event)">Section: Clones</h4>
+                    <div hidden>
+                        <p>0</p>
+                    </div>
+                    <h4 class="mainTools_Help_SectionTitle" onclick="onclick_handle(this, event)">Examples</h4>
+                    <div hidden>
+                        <p>More examples will be available soon.</p>
+                        <p>Sample project created in the Demo Video linked above:<br><a href="others/Examples/FromDemoVideo/project.zip">project.zip</a></p>
                     </div>
                 </div>
             </div>
